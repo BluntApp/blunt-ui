@@ -34,7 +34,8 @@ const SignUp = props => {
       userId: "",
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
+      invitedBy:""
     },
     validator: {
       validFName: false,
@@ -72,6 +73,7 @@ const SignUp = props => {
   useEffect(() => {
     let eRegister = {...register}
     eRegister.detail.userId = props.generatedUserId;
+    eRegister.detail.invitedBy = props.match.params.userid ? props.match.params.userid : "";
     setRegister({...register, ...eRegister});
   }, [props.generatedUserId])
 

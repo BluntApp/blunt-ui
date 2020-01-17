@@ -31,7 +31,9 @@ export const BluntLayout = () => {
                        render={props => <SignIn {...props} />}/>
                 <Route path="/blunt/signin"
                        render={props => <SignIn {...props} />}/>
-                <Route path="/blunt/signup"
+                <Route path="/blunt/signup" exact
+                       render={props => <SignUp {...props} />}/>
+                <Route path="/blunt/signup/:userid" exact
                        render={props => <SignUp {...props} />}/>
                 <Route path="/blunt/posts"
                        render={props => <PostGridList {...props} />}/>
