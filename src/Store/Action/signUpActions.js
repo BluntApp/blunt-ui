@@ -31,12 +31,6 @@ export const checkMobileAvailability = (mobile) => dispatch => {
         type: MOBILE_UNAVAILABLE,
         payload: error.response.data.message
       })
-    } else {
-      dispatch({
-        type: DISPLAY_SNACKBAR,
-        message: "Service Unavailable",
-        variant: SNACKBAR_VARIANT_ERROR
-      })
     }
   })
 };

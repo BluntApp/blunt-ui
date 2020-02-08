@@ -19,7 +19,6 @@ import {signInBlunt} from "../../Store/Action/signInActions";
 
 const SignIn = props => {
   const classes = signInStyles();
-
   useEffect(() => {
     if(!props.routeTo==""){
       props.history.push(props.routeTo)
@@ -76,10 +75,9 @@ const SignIn = props => {
     props.signInBlunt(credential.mobile, credential.password);
   }
 
-
   return (
       <MuiThemeProvider theme={signInMuiTheme}>
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" >
           <Paper elevation={3}>
             <Grid container direction="row" justify="center">
               <Avatar className={cs(classes.avatar)}>

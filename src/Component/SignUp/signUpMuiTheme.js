@@ -17,8 +17,7 @@ const signUpMuiTheme = createMuiTheme({
         borderRadius: 6
       },
       root:{
-        marginTop: 55,
-        marginBottom: 50,
+        marginBottom: 25,
         width: 425,
         paddingLeft: 10,
         paddingRight: 10,

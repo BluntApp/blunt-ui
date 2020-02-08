@@ -13,6 +13,20 @@ const bluntAppBarStyles = makeStyles(theme => ({
       display: 'block',
     },
   },
+  appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - 240px)`,
+    marginLeft: 240,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -59,6 +73,23 @@ const bluntAppBarStyles = makeStyles(theme => ({
     [theme.breakpoints.up('md')]: {
       display: 'none',
     },
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: 240,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: 240,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
   },
 }));
 

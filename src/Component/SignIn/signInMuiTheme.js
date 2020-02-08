@@ -17,7 +17,6 @@ const signInMuiTheme = createMuiTheme({
         borderRadius: 6
       },
       root:{
-        marginTop: 55,
         marginBottom: 50,
         width: 425,
         paddingLeft: 10,

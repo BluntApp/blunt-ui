@@ -4,13 +4,24 @@ const postGridListMuiTheme = createMuiTheme({
   overrides: {
     MuiContainer:{
       root:{
-        width: "50%"
+        width: "75%"
+      }
+    },
+    MuiChip: {
+      root:{
+        width: 140
       }
     },
     MuiCard:{
       root:{
         borderRadius: 5,
-        marginBottom: 5
+        marginBottom: 5,
+        overflow: null
+      }
+    },
+    MuiCardContent:{
+      root:{
+        minWidth:900
       }
     },
     MuiGridList :{
@@ -21,9 +32,6 @@ const postGridListMuiTheme = createMuiTheme({
     MuiPaper: {
       rounded: {
         borderRadius: 0
-      },
-      root:{
-        marginBottom:5
       }
     }
   }

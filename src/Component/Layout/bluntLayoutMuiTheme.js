@@ -7,7 +7,7 @@ const bluntLayoutMuiTheme = createMuiTheme({
         borderRadius: 0
       },
       root: {
-         backgroundColor: "transparent"
+        backgroundColor: "transparent",
       }
     }
   }
