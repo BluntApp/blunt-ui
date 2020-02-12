@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -11,7 +11,6 @@ import signInMuiTheme from "./signInMuiTheme";
 import signInStyles from "./signInStyles";
 import {connect} from "react-redux";
 import cs from "classnames";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import {Link, Route} from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
@@ -19,11 +18,6 @@ import {signInBlunt} from "../../Store/Action/signInActions";
 
 const SignIn = props => {
   const classes = signInStyles();
-  useEffect(() => {
-    if(!props.routeTo==""){
-      props.history.push(props.routeTo)
-    }
-  }, [props.routeTo])
 
   const [credential, setCredential] = useState({
     mobile: "",
@@ -36,11 +30,12 @@ const SignIn = props => {
   })
 
   const inputHandler = (event) => {
-    if(event.target.name==='mobile' && isNaN(event.target.value)){
-      setCredential({...credential,[event.target.name]:credential.mobile})
+    if (event.target.name === 'mobile' && isNaN(event.target.value)) {
+      setCredential({...credential, [event.target.name]: credential.mobile})
       return;
     }
-    setCredential({...credential, [event.target.name]: event.target.value.trim()});
+    setCredential(
+        {...credential, [event.target.name]: event.target.value.trim()});
   }
 
   const rememberMeHandler = (value) => {
@@ -54,8 +49,9 @@ const SignIn = props => {
     }
     switch (event.target.name) {
       case 'mobile':
-        let mobileValid = event.target.value.length===10;
-        dCredential.formErrors.mobile = mobileValid ? "" : "Invalid mobile format";
+        let mobileValid = event.target.value.length === 10;
+        dCredential.formErrors.mobile = mobileValid ? ""
+            : "Invalid mobile format";
         dCredential.validMobile = mobileValid;
         break;
       case 'password':
@@ -67,7 +63,8 @@ const SignIn = props => {
       default:
         break;
     }
-    dCredential.validForm = dCredential.validMobile && dCredential.validPassword;
+    dCredential.validForm = dCredential.validMobile
+        && dCredential.validPassword;
     setCredential({...credential, ...dCredential});
   }
 
@@ -77,7 +74,7 @@ const SignIn = props => {
 
   return (
       <MuiThemeProvider theme={signInMuiTheme}>
-        <Container component="main" maxWidth="xs" >
+        <Container component="main" maxWidth="xs">
           <Paper elevation={3}>
             <Grid container direction="row" justify="center">
               <Avatar className={cs(classes.avatar)}>
@@ -94,7 +91,7 @@ const SignIn = props => {
                   label="Mobile"
                   name="mobile"
                   autoComplete="mobile"
-                  inputProps={{ maxLength: 10}}
+                  inputProps={{maxLength: 10}}
                   helperText={credential.formErrors.mobile}
                   onChange={event => inputHandler(event)}
                   onBlur={event => validateField(event)}
@@ -123,16 +120,16 @@ const SignIn = props => {
                       color="primary"/>}
                   label="Remember me"
               />
-              <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  disabled={!(credential.validForm)}
-                  className={cs(classes.submit)}
-                  onClick={doSignInBlunt}
-              >
-                Sign In
-              </Button>
+                <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    disabled={!(credential.validForm)}
+                    className={cs(classes.submit)}
+                    onClick={doSignInBlunt}
+                >
+                  Sign In
+                </Button>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" to="" variant="body2">
@@ -155,8 +152,6 @@ const SignIn = props => {
   );
 }
 const mapStateToProps = state => ({
-  routeTo: state.signInReducer.routeTo
 });
-
 
 export default connect(mapStateToProps, {signInBlunt})(SignIn);

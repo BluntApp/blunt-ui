@@ -2,20 +2,11 @@ import {connect} from "react-redux";
 import {MuiThemeProvider} from "@material-ui/core";
 import React, {useEffect, useState} from "react";
 import pendingFollowerGridListMuiTheme from "./pendingFollowerGridListMuiTheme";
-import pendingFollowerGridListStyles from "./pendingFollowerGridListStyles";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import cs from "classnames";
-import Avatar from "@material-ui/core/Avatar";
-import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
 import {
-  AcceptFollower,
   acceptPendingFollower,
   checkNickNameAvailability,
-  closePendingFollowerDialog,
-  loadPendingFollowers
+  closePendingFollowerDialog
 } from "../../Store/Action/followerActions";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";

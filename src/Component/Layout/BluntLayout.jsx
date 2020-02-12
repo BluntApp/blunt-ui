@@ -14,51 +14,29 @@ import FollowerGridList from "../FollowerGridList/FollowerGridList";
 import Profile from "../Profile/Profile";
 import PendingFollowerGridList
   from "../PendingFollowerGridList/PendingFollowerGridList";
-import axios from "axios";
-import store from "../../Store/Configure";
-import {DISPLAY_SNACKBAR} from "../../Store/Types";
-import {SNACKBAR_VARIANT_ERROR} from "../../Constant/Constants";
 // javascript plugin used to create scrollbars on windows
+import { useHistory } from "react-router-dom";
+import {isNotBlank} from "../../Store/Utility";
+import {loadMenubarList} from "../../Store/Action/menuBarActions";
 
 export const BluntLayout = (props) => {
-
-  axios.interceptors.request.use(
-      request => {
-        console.log("request"+ request)
-        request.headers['BLUNT_ID'] =props.signedInBlunt.id;
-        request.timeout = 40000;
-        return request;
-      }
-  )
-
-  axios.interceptors.response.use(
-      response => {
-        return response;
-      },
-      error => {
-        if (error.response.status == 504) {
-          store.dispatch({
-            type: DISPLAY_SNACKBAR,
-            message: error.response.data.error,
-            variant: SNACKBAR_VARIANT_ERROR
-          })
-        } else if (error.response.status == 500) {
-          store.dispatch({
-            type: DISPLAY_SNACKBAR,
-            message: error.response.data.error,
-            variant: SNACKBAR_VARIANT_ERROR
-          })
-        }
-        return Promise.reject(error);
-      }
-  )
-
   const classes = bluntLayoutStyles();
   const [open, setOpen] = useState(props.isMenuBarOpen);
-
+  let history = useHistory();
   useEffect(() => {
     setOpen(props.isMenuBarOpen)
   }, [props.isMenuBarOpen])
+
+  useEffect(() => {
+    if(!props.routeTo==""){
+      history.push(props.routeTo)
+    }
+  }, [props.routeTo])
+
+  useEffect(()=>{
+    let sessionBluntId = sessionStorage.getItem("BLUNT-ID");
+    isNotBlank(sessionBluntId) && props.loadMenubarList()
+  },[])
 
   return (
       <MuiThemeProvider theme={bluntLayoutMuiTheme}>
@@ -66,13 +44,12 @@ export const BluntLayout = (props) => {
                className={cs(classes.content, {[classes.contentShift]: open,})}>
           <CssBaseline/>
           <Switch>
+
             <Route path="/blunt/home"
                    render={props => <SignIn {...props} />}/>
             <Route path="/blunt/signin" exact
                    render={props => <SignIn {...props} />}/>
             <Route path="/blunt/signup" exact
-                   render={props => <SignUp {...props} />}/>
-            <Route path="/blunt/signup/:userid" exact
                    render={props => <SignUp {...props} />}/>
             <Route path="/blunt/posts"
                    render={props => <PostGridList {...props} />}/>
@@ -91,7 +68,7 @@ export const BluntLayout = (props) => {
 
 const mapStateToProps = state => ({
   isMenuBarOpen: state.menuBarReducer.isMenuBarOpen,
-  signedInBlunt: state.signInReducer.signedInBlunt
+  routeTo: state.menuBarReducer.routeTo
 });
 
-export default connect(mapStateToProps, null)(BluntLayout);
+export default connect(mapStateToProps, {loadMenubarList})(BluntLayout);

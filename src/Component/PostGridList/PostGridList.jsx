@@ -1,6 +1,5 @@
 import {connect} from "react-redux";
 import {MuiThemeProvider} from "@material-ui/core";
-import Container from "@material-ui/core/Container";
 import Paper from "@material-ui/core/Paper";
 import React, {useEffect, useState} from "react";
 import postGridListMuiTheme from "./postGridListMuiTheme";
@@ -81,7 +80,7 @@ const PostGridList = props => {
   }, [props.posts])
 
   useEffect(()=>{
-    props.loadFollowers(props.signedInBlunt.id)
+    props.loadFollowers()
   },[])
 
 
@@ -225,7 +224,6 @@ const PostGridList = props => {
 
 const mapStateToProps = state => ({
   posts: state.signInReducer.posts,
-  signedInBlunt: state.signInReducer.signedInBlunt,
   followers: state.followerReducer.followers
 });
 

@@ -12,15 +12,14 @@ import signUpMuiTheme from "./signUpMuiTheme";
 import {MuiThemeProvider} from "@material-ui/core";
 import {Link, Route} from "react-router-dom";
 import {
-  checkMobileAvailability, resendOtp,
+  checkMobileAvailability,
+  resendOtp,
   signUpBlunt,
   validateOtpAndgenerateUserId
 } from "../../Store/Action/signUpActions";
 import Paper from "@material-ui/core/Paper";
-import Icon from "@material-ui/core/Icon";
 import IconButton from "@material-ui/core/IconButton";
-import { RefreshOutlined} from "@material-ui/icons";
-
+import {RefreshOutlined} from "@material-ui/icons";
 
 const SignUp = props => {
 
@@ -75,11 +74,6 @@ const SignUp = props => {
     setRegister({...register, ...eRegister});
   }, [props.generatedUserId])
 
-  useEffect(() => {
-    if(!props.routeTo==""){
-      props.history.push(props.routeTo)
-    }
-  }, [props.routeTo])
 
   const inputHandler = (event) => {
     let eRegister = {...register}
@@ -347,7 +341,6 @@ const mapStateToProps = state => ({
   mobileCheckMessage: state.signUpReducer.mobileCheckMessage,
   generatedUserId: state.signUpReducer.generatedUserId,
   otpMismatchMessage: state.signUpReducer.otpMismatchMessage,
-  routeTo: state.signUpReducer.routeTo
 });
 
 export default connect(mapStateToProps,

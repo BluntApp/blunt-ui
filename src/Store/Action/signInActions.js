@@ -1,18 +1,19 @@
 import {
   DISPLAY_SNACKBAR,
   LOAD_BLUNT_LOGGEDIN,
-  LOAD_FOLLOWERS,
   LOAD_MENU_BAR_LIST,
   LOAD_POSTS,
   ROUTE_TO
 } from "../Types";
 import axios from "axios";
 import {
+  CONNECTION_ERROR,
   LOGGED_IN_SUCCESS,
   SNACKBAR_VARIANT_ERROR,
   SNACKBAR_VARIANT_SUCCESS
 } from "../../Constant/Constants";
 import {AUTHORIZED_USER_MENUBAR} from "../../Constant/MenuBarConstants";
+import {isNotEmptyObject} from "../Utility";
 
 export const dummyPosts =
     [
@@ -141,17 +142,11 @@ export const dummyFollowers =
     ]
 
 export const signInBlunt = (mobile, password) => dispatch => {
-  /*axios.interceptors.request.use(
-      async request => {
-        request.headers['USER_ID'] = 'useridFromInterceptor'
-        return request;
-      }
-  )*/
-
   axios
   .post("http://localhost:8765/api/v1/onboard/signin",
       {"mobile": mobile, "password": password})
   .then(response => {
+        sessionStorage.setItem("BLUNT-ID", response.data.id);
         dispatch({
           type: DISPLAY_SNACKBAR,
           message: LOGGED_IN_SUCCESS,
@@ -171,9 +166,7 @@ export const signInBlunt = (mobile, password) => dispatch => {
         });
 
         axios
-        .get("http://localhost:8765/api/v1/publish/posts", {
-          headers: {"BLUNT-ID": response.data.id}
-        })
+        .get("http://localhost:8765/api/v1/publish/posts")
         .then(response => {
           dispatch({
             type: LOAD_POSTS,
@@ -185,7 +178,7 @@ export const signInBlunt = (mobile, password) => dispatch => {
   .catch(error => {
     dispatch({
       type: DISPLAY_SNACKBAR,
-      message: error.response.data.message,
+      message: isNotEmptyObject(error.response) ? error.response.data.message : CONNECTION_ERROR,
       variant: SNACKBAR_VARIANT_ERROR
     })
   })

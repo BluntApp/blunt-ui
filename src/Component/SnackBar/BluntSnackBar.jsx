@@ -9,7 +9,6 @@ import bluntSnackBarStyles from "./bluntSnackBarStyles";
 import {connect} from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from '@material-ui/icons/Close';
-import signUpMuiTheme from "../SignUp/signUpMuiTheme";
 import {MuiThemeProvider} from "@material-ui/core";
 import bluntSnackBarMuiTheme from "./bluntSnackBarMuiTheme";
 import cs from "classnames";

@@ -8,9 +8,11 @@ import {
   ROUTE_TO
 } from "../Types";
 import {
+  CONNECTION_ERROR,
   SNACKBAR_VARIANT_ERROR,
   SNACKBAR_VARIANT_SUCCESS
 } from "../../Constant/Constants";
+import {isNotEmptyObject} from "../Utility";
 
 export const checkMobileAvailability = (mobile) => dispatch => {
   axios.get("http://localhost:8765/api/v1/onboard/check/" + mobile)
@@ -104,17 +106,17 @@ export const signUpBlunt = (registerDetail) => dispatch => {
           message: "Blunt SignUp Success",
           variant: SNACKBAR_VARIANT_SUCCESS
         });
-        dispatch(
-            {
-              type: ROUTE_TO,
-              path: "/blunt/signin"
-            });
+        dispatch({
+          type: ROUTE_TO,
+          path: "/blunt/signin"
+        });
       }
   )
   .catch(error => {
     dispatch({
       type: DISPLAY_SNACKBAR,
-      message: error.response.data.message,
+      message: isNotEmptyObject(error.response) ? error.response.data.message
+          : CONNECTION_ERROR,
       variant: SNACKBAR_VARIANT_ERROR
     })
   })

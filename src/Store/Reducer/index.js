@@ -5,6 +5,7 @@ import snackBarReducer from "./snackBarReducer";
 import postReducer from "./postReducer";
 import menuBarReducer from "./menuBarReducer";
 import followerReducer from "./followerReducer";
+import signOutReducer from "./signOutReducer";
 
 export default combineReducers({
   signInReducer: signInReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   snackBarReducer: snackBarReducer,
   postReducer: postReducer,
   menuBarReducer: menuBarReducer,
-  followerReducer: followerReducer
+  followerReducer: followerReducer,
+  signOutReducer: signOutReducer
 });

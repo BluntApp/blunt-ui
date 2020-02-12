@@ -3,14 +3,13 @@ import {
   FILL_USER_ID,
   MOBILE_UNAVAILABLE,
   OTP_MISMATCH,
-  RESET_VALIDATION_MESSAGE, ROUTE_TO
+  RESET_VALIDATION_MESSAGE
 } from "../Types";
 
 const initialState = {
   mobileCheckMessage: "",
   otpMismatchMessage:"",
   generatedUserId:"",
-  routeTo:""
 };
 
 const signUpReducer = (state = initialState, action) => {
@@ -31,10 +30,6 @@ const signUpReducer = (state = initialState, action) => {
       return updateObject(state, {
         otpMismatchMessage: "",
         mobileCheckMessage: ""
-      })
-    case ROUTE_TO:
-      return updateObject(state, {
-        routeTo: action.path
       })
     default:
       return state;
