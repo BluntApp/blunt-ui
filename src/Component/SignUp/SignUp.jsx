@@ -12,7 +12,7 @@ import signUpMuiTheme from "./signUpMuiTheme";
 import {MuiThemeProvider} from "@material-ui/core";
 import {Link, Route} from "react-router-dom";
 import {
-  checkMobileAvailability,
+  checkMobileAvailability, generateOtp,
   resendOtp,
   signUpBlunt,
   validateOtpAndgenerateUserId
@@ -20,6 +20,7 @@ import {
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import {RefreshOutlined} from "@material-ui/icons";
+import Forward from '@material-ui/icons/Forward';
 
 const SignUp = props => {
 
@@ -211,7 +212,7 @@ const SignUp = props => {
                       autoComplete="lname"
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={4}>
                   <TextField
                       variant="outlined"
                       required
@@ -225,7 +226,15 @@ const SignUp = props => {
                       onChange={event => inputHandler(event)}
                       onBlur={event => validateField(event)}
                       value={register.detail.mobile}
+                      className={cs(classes.mobileWidth)}
                   />
+                </Grid>
+                <Grid item xs={12} sm={2}  >
+                  <IconButton id="forwardButton"
+                              disabled ={!(register.validator.validMobile && register.formErrors.mobile==="")}
+                              onClick={()=>props.generateOtp(register.detail.mobile)} className={cs(classes.forwardWidth)} >
+                    <Forward/>
+                  </IconButton>
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <TextField
@@ -242,10 +251,11 @@ const SignUp = props => {
                       onChange={event => inputHandler(event)}
                       onBlur={event => validateField(event)}
                       value={register.detail.otp}
+                      className={cs(classes.mobileWidth)}
                   />
                 </Grid>
-                <Grid item xs={12} sm={1} onClick={(register.validator.validMobile && register.formErrors.mobile==="") ? doResendOtp:""}>
-                  <IconButton disabled={!(register.validator.validMobile && register.formErrors.mobile==="")}>
+                <Grid item xs={12} sm={2} onClick={(register.validator.validMobile && register.formErrors.mobile==="") ? doResendOtp:""}>
+                  <IconButton className={cs(classes.forwardWidth)}  disabled={!(register.validator.validMobile && register.formErrors.mobile==="")}>
                     <RefreshOutlined />
                   </IconButton>
                 </Grid>
@@ -344,7 +354,7 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps,
-    {checkMobileAvailability, validateOtpAndgenerateUserId, signUpBlunt, resendOtp})(
+    {checkMobileAvailability, validateOtpAndgenerateUserId, signUpBlunt, resendOtp, generateOtp})(
     SignUp);
 
 

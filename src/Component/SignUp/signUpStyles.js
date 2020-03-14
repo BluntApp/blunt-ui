@@ -19,6 +19,13 @@ const signUpStyles = makeStyles(theme => ({
   },
   linkHandler: {
     cursor: 'pointer'
+  },
+  forwardWidth: {
+    paddingLeft:25,
+    paddingTop:19
+  },
+  mobileWidth:{
+    width: "125%"
   }
 }));
 

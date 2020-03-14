@@ -29,23 +29,35 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import {loadFollowers} from "../../Store/Action/followerActions";
+import {loadPosts, postContent} from "../../Store/Action/postActions";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Tooltip from "@material-ui/core/Tooltip";
+import Comments from "../Comments/Comments";
+import {loadComments} from "../../Store/Action/commentsActions";
 
 const PostGridList = props => {
   const classes = postGridListStyles();
 
-  const loadComments = (value) => {
-    console.log(value);
+  const loadComments = (event, expanded,  postId) => {
+    if(!expanded){
+      return;
+    }
+    props.loadComments(postId)
   };
 
   const flipExpansionPanel = () => {
     setExpand(!expand)
   }
 
-  const [postList, setPostList] = useState([])
   const [expand, setExpand] = useState(false)
   const [followerList, setFollowerList] = useState([])
-  const [checked, setChecked] = useState([1]);
+  const [checked, setChecked] = useState([]);
+  const [content, setContent] = useState();
+  const [allRead, setAllRead] = useState(false);
 
+  const toggleAllRead = (value) => {
+    setAllRead(value);
+  }
   const handleToggle = value => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
@@ -69,20 +81,22 @@ const PostGridList = props => {
     setFollowerList(eFollowerList)
   }
 
+  const storeContent = (event) => {
+    setContent(event.target.value);
+  }
 
+  const postContent = () => {
+    let selectedFollowerId = [];
+    checked.map(selectedFollower => {
+      selectedFollowerId.push(selectedFollower.followerId)
+    })
+    props.postContent(selectedFollowerId, content, allRead);
+  }
 
   useEffect(() => {
-    let ePostList = [...postList]
-    props.posts.forEach(post => {
-      ePostList.push(post)
-    })
-    setPostList([...postList, ...ePostList]);
-  }, [props.posts])
-
-  useEffect(()=>{
+    props.loadPosts();
     props.loadFollowers()
-  },[])
-
+  }, [])
 
   useEffect(() => {
     setFollowerList(props.followers);
@@ -90,8 +104,8 @@ const PostGridList = props => {
 
   return (
       <MuiThemeProvider theme={postGridListMuiTheme}>
-        <Grid container direction="row" justify="center"  >
-          <Card>
+        <Grid container direction="row" justify="center">
+          <Card className={cs(classes.postCardPanel)}>
             <ExpansionPanel expanded={expand}>
               <ExpansionPanelSummary
                   expandIcon={<AddCircleIcon/>}
@@ -123,29 +137,30 @@ const PostGridList = props => {
                   <Paper className={cs(classes.followerFilteredList)}
                          elevation={0}>
 
-                      <List>
-                        {followerList.map(follower => {
-                          return (
-                              <ListItem key={follower} button>
-                                <ListItemAvatar>
-                                  <Avatar
-                                      alt={`Avatar n°${follower + 1}`}
-                                      src={`/static/images/avatar/${follower + 1}.jpg`}
-                                  />
-                                </ListItemAvatar>
-                                <ListItemText id={follower.id} primary={follower.followerNickName} />
-                                <ListItemSecondaryAction>
-                                  <Checkbox
-                                      edge="end"
-                                      onChange={handleToggle(follower)}
-                                      checked={checked.indexOf(follower) !== -1}
-                                      inputProps={{ 'aria-labelledby': follower.id }}
-                                  />
-                                </ListItemSecondaryAction>
-                              </ListItem>
-                          );
-                        })}
-                      </List>
+                    <List>
+                      {followerList.map(follower => {
+                        return (
+                            <ListItem key={follower.id} button>
+                              <ListItemAvatar>
+                                <Avatar aria-label="recipe"
+                                        className={classes.avatar}>
+                                  R
+                                </Avatar>
+                              </ListItemAvatar>
+                              <ListItemText id={follower.id}
+                                            primary={follower.followerNickName}/>
+                              <ListItemSecondaryAction>
+                                <Checkbox
+                                    edge="end"
+                                    onChange={handleToggle(follower)}
+                                    checked={checked.indexOf(follower) !== -1}
+                                    inputProps={{'aria-labelledby': follower.id}}
+                                />
+                              </ListItemSecondaryAction>
+                            </ListItem>
+                        );
+                      })}
+                    </List>
                   </Paper>
                 </Paper>
 
@@ -154,11 +169,28 @@ const PostGridList = props => {
                     <TextareaAutosize
                         rowsMax={4}
                         aria-label="maximum height"
-                        placeholder="Maximum 4 rows"
-                        defaultValue="Going to learn GoLang"
-                        className={cs(classes.commentBox)}
+                        placeholder="Post your ideas here"
+                        className={cs(classes.contentBox)}
+                        id="content"
+                        onBlur={(event) => storeContent(event)}
                     />
                   </CardContent>
+                  <FormControlLabel
+                      control={
+                        <Tooltip
+                            title="Allow all Followers to read others comments"
+                            interactive>
+                          <Checkbox
+                              checked={allRead}
+                              onChange={() => toggleAllRead(!allRead)}
+                              value="isCommentsPublic"
+                              color="secondary"
+                          />
+                        </Tooltip>
+                      }
+                      label="Comments Read By All"
+                      className={cs(classes.isCommentsPublicAlign)}
+                  />
                 </Paper>
 
               </ExpansionPanelDetails>
@@ -166,34 +198,36 @@ const PostGridList = props => {
               <ExpansionPanelActions>
                 <Button size="small"
                         onClick={flipExpansionPanel}>Cancel</Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="primary" onClick={postContent}>
                   Post
                 </Button>
               </ExpansionPanelActions>
             </ExpansionPanel>
           </Card>
-          {postList.map(post => (
-              <Card>
+          {props.posts.map(post => (
+              <Card className={cs(classes.postCardPanel)}>
                 <CardHeader
                     avatar={
                       <Avatar aria-label="recipe" className={classes.avatar}>
                         R
                       </Avatar>
                     }
-                    title={post.postedBy}
+
+                    title={post.posterId === post.viewerId ? "You"
+                        : post.posterName}
                     subheader={post.postedOn}
+
                 />
-                <CardContent>
+                <CardContent className={cs(classes.contentAlignment)}>
                   <Typography variant="body2" color="textSecondary"
                               component="p">
-                    {post.content}
+                    {post.contentDto && post.contentDto.content}
                   </Typography>
                 </CardContent>
 
-                <ExpansionPanel TransitionProps={{unmountOnExit: true}}>
+                <ExpansionPanel TransitionProps={{unmountOnExit: true}} onChange={(event,expanded) => loadComments(event, expanded, post.id)}>
                   <ExpansionPanelSummary
-                      expandIcon={<ExpandMoreIcon
-                          onClick={event => loadComments(post.id)}/>}
+                      expandIcon={<ExpandMoreIcon/>}
                       aria-controls="panel1a-content"
                       id="panel1a-header"
                   >
@@ -203,16 +237,7 @@ const PostGridList = props => {
                     </Typography>
                   </ExpansionPanelSummary>
                   <ExpansionPanelDetails>
-                    <Paper className={cs(classes.commentWidth)}>
-                      <CardContent>
-                        <Typography paragraph>
-                          Heat 1/2 cup of the broth in a pot until simmering,
-                          add saffron and set aside for 10 minutes.
-                          Heat 1/2 cup of the broth in a pot until simmering,
-                          add saffron and set aside for 10 minutes.
-                        </Typography>
-                      </CardContent>
-                    </Paper>
+                    <Comments selectedPost={post}/>
                   </ExpansionPanelDetails>
                 </ExpansionPanel>
               </Card>
@@ -223,8 +248,9 @@ const PostGridList = props => {
 }
 
 const mapStateToProps = state => ({
-  posts: state.signInReducer.posts,
+  posts: state.postReducer.posts,
   followers: state.followerReducer.followers
 });
 
-export default connect(mapStateToProps, {loadFollowers})(PostGridList);
+export default connect(mapStateToProps,
+    {loadFollowers, loadPosts, postContent, loadComments})(PostGridList);

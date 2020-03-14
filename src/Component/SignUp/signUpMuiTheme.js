@@ -12,6 +12,17 @@ const signUpMuiTheme = createMuiTheme({
         color: "red"
       }
     },
+    MuiIconButton:{
+      root:{
+        color:"#f50a57"
+      }
+    },
+    /*,
+    MuiButton:{
+      containedPrimary:{
+        backgroundColor: "#f50a57"
+      }
+    },*/
     MuiPaper: {
       rounded: {
         borderRadius: 6

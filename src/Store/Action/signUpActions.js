@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
   DISPLAY_SNACKBAR,
   FILL_USER_ID,
@@ -13,15 +12,11 @@ import {
   SNACKBAR_VARIANT_SUCCESS
 } from "../../Constant/Constants";
 import {isNotEmptyObject} from "../Utility";
+import bluntAxios from "../../Config/AxiosConfiguration";
 
 export const checkMobileAvailability = (mobile) => dispatch => {
-  axios.get("http://localhost:8765/api/v1/onboard/check/" + mobile)
+  bluntAxios.get("/api/v1/onboard/check/" + mobile)
   .then(response => {
-        dispatch({
-          type: DISPLAY_SNACKBAR,
-          message: response.data,
-          variant: SNACKBAR_VARIANT_SUCCESS
-        });
         dispatch({
           type: RESET_VALIDATION_MESSAGE,
         })
@@ -39,7 +34,7 @@ export const checkMobileAvailability = (mobile) => dispatch => {
 
 export const resendOtp = (mobile) => dispatch => {
   console.log(mobile);
-  axios.get("http://localhost:8765/api/v1/onboard/resend/" + mobile)
+  bluntAxios.get("/api/v1/onboard/resend/" + mobile)
   .then(response => {
         dispatch({
           type: DISPLAY_SNACKBAR,
@@ -68,9 +63,32 @@ export const resendOtp = (mobile) => dispatch => {
   })
 };
 
+export const generateOtp = (mobile) => dispatch => {
+  console.log(mobile);
+  bluntAxios.get("/api/v1/onboard/otp/" + mobile)
+  .then(response => {
+        dispatch({
+          type: DISPLAY_SNACKBAR,
+          message: response.data,
+          variant: SNACKBAR_VARIANT_SUCCESS
+        });
+        dispatch({
+          type: RESET_VALIDATION_MESSAGE,
+        });
+      }
+  )
+  .catch(error => {
+    dispatch({
+      type: DISPLAY_SNACKBAR,
+      message: "Service Unavailable",
+      variant: SNACKBAR_VARIANT_ERROR
+    })
+  })
+};
+
 export const validateOtpAndgenerateUserId = (mobile, otp) => dispatch => {
-  axios
-  .post("http://localhost:8765/api/v1/onboard/create",
+  bluntAxios
+  .post("/api/v1/onboard/create",
       {"mobile": mobile, "otp": otp})
   .then(response => {
         dispatch({
@@ -98,8 +116,8 @@ export const validateOtpAndgenerateUserId = (mobile, otp) => dispatch => {
 }
 
 export const signUpBlunt = (registerDetail) => dispatch => {
-  axios
-  .post("http://localhost:8765/api/v1/onboard/signup", registerDetail)
+  bluntAxios
+  .post("/api/v1/onboard/signup", registerDetail)
   .then(response => {
         dispatch({
           type: DISPLAY_SNACKBAR,

@@ -11,9 +11,6 @@ import {Router} from "react-router-dom";
 import {createBrowserHistory} from "history";
 import DateFnsUtils from "@date-io/date-fns";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
-import axios from "axios";
-import {DISPLAY_SNACKBAR} from "./Store/Types";
-import {SNACKBAR_VARIANT_ERROR} from "./Constant/Constants";
 
 const hist = createBrowserHistory();
 ReactDOM.render(
@@ -32,34 +29,3 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-axios.interceptors.request.use(
-    request => {
-      console.log("request"+ request)
-      request.headers['BLUNT-ID'] = sessionStorage.getItem('BLUNT-ID');
-      request.headers['token'] ="access_token";
-      request.timeout = 40000;
-      return request;
-    }
-)
-
-axios.interceptors.response.use(
-    response => {
-      return response;
-    },
-    error => {
-      if (error.response.status == 504) {
-        store.dispatch({
-          type: DISPLAY_SNACKBAR,
-          message: error.response.data.error,
-          variant: SNACKBAR_VARIANT_ERROR
-        })
-      } else if (error.response.status == 500) {
-        store.dispatch({
-          type: DISPLAY_SNACKBAR,
-          message: error.response.data.error,
-          variant: SNACKBAR_VARIANT_ERROR
-        })
-      }
-      return Promise.reject(error);
-    }
-)

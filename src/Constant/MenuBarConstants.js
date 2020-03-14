@@ -2,16 +2,20 @@ export const ALL_USER_MENUBAR = [
   {
     "name": "SIGNIN",
     "path": "/blunt/signin",
-    "icon": "<InboxIcon/>"
+    "icon": "SignInIcon"
   },{
     "name": "SIGNUP",
     "path": "/blunt/signup",
-    "icon": "SignupIcon"
+    "icon": "SignUpIcon"
   }
 ]
 
 export const AUTHORIZED_USER_MENUBAR = [
   {
+    "name": "DASH BOARD",
+    "path": "/blunt/dashboard",
+    "icon": "DashboardIcon"
+  },{
     "name": "POSTS",
     "path": "/blunt/posts",
     "icon": "PostIcon"
@@ -22,19 +26,15 @@ export const AUTHORIZED_USER_MENUBAR = [
   },{
     "name": "PENDING FOLLOWERS",
     "path": "/blunt/pending",
-    "icon": "FollowIcon"
-  },{
-    "name": "NOTIFICATIONS",
-    "path": "/blunt/notifications",
-    "icon": "NotifyIcon"
+    "icon": "PendingFollowIcon"
   },{
     "name": "PROFILE",
     "path": "/blunt/profile",
-    "icon": "UserIcon"
+    "icon": "ProfileIcon"
   },{
     "name": "SIGNOUT",
     "path": "/blunt/home",
-    "icon": "UserIcon"
+    "icon": "SignOutIcon"
   }
 ]
 
@@ -50,7 +50,7 @@ export const ADMIN_USER_MENUBAR = [
   },{
     "name": "PENDING FOLLOWERS",
     "path": "/blunt/pending",
-    "icon": "FollowIcon"
+    "icon": "PendingFollowIcon"
   },{
     "name": "NOTIFICATIONS",
     "path": "/blunt/notifications",
@@ -58,7 +58,7 @@ export const ADMIN_USER_MENUBAR = [
   },{
     "name": "PROFILE",
     "path": "/blunt/profile",
-    "icon": "UserIcon"
+    "icon": "ProfileIcon"
   },{
     "name": "SETTINGS",
     "path": "/blunt/settings",
@@ -66,6 +66,6 @@ export const ADMIN_USER_MENUBAR = [
   },{
     "name": "SIGNOUT",
     "path": "/blunt/home",
-    "icon": "UserIcon"
+    "icon": "SignOutIcon"
   }
 ]

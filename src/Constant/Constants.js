@@ -1,4 +1,4 @@
-export const BASE_IP = "http://localhost:8080/"
+export const POSTED_SUCCESSFULLY = "Posted Successfully";
 
 export const CONNECTION_ERROR = "Error Connecting to Server"
 export const SNACKBAR_VARIANT_ERROR = "error"

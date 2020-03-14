@@ -29,6 +29,11 @@ const postGridListMuiTheme = createMuiTheme({
         margin:0
       }
     },
+    MuiFormControlLabel:{
+      root:{
+        marginLeft: 0
+      }
+    },
     MuiPaper: {
       rounded: {
         borderRadius: 0

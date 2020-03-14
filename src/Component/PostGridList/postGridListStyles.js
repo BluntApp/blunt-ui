@@ -5,9 +5,17 @@ const postGridListStyles = makeStyles(theme => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
+  contentAlignment:{
+    maxHeight: 475,
+    minHeight: 0,
+    overflow: "scroll",
+    overflowX: "hidden",
+    overflowY: "auto"
+  },
   commentWidth:{
     maxHeight: 300,
-    maxWidth: 1000,
+    maxWidth: 1175,
+    minWidth:1175,
     minHeight: 150,
     marginLeft: 15,
     overflow: "scroll",
@@ -24,8 +32,9 @@ const postGridListStyles = makeStyles(theme => ({
   followerFilteredList:{
     overflow: "scroll",
     overflowX: "hidden",
-    maxHeight: 300,
-    minHeight: 150
+    overflowY: "auto",
+    maxHeight: 282,
+    minHeight: 282
   },
   followerSearchText:{
     marginLeft:15
@@ -35,7 +44,12 @@ const postGridListStyles = makeStyles(theme => ({
     maxWidth: 900,
     marginLeft: 15,
     overflow: "scroll",
-    overflowX: "hidden"
+    overflowX: "hidden",
+    overflowY: "auto"
+  },
+  postCardPanel:{
+    minWidth: 1250,
+    maxWidth: 1250
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -65,12 +79,20 @@ const postGridListStyles = makeStyles(theme => ({
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
   },
-  commentBox:{
-    minWidth: 825,
-    maxWidth: 825,
-    maxHeight: 500,
+  contentBox:{
+    minWidth: 870,
+    maxWidth: 870,
+    maxHeight: 475,
     minHeight: 250
-
+  },
+  postBox:{
+    minWidth: 1110,
+    maxWidth: 1110,
+    maxHeight: 125,
+    minHeight: 125
+  },
+  isCommentsPublicAlign:{
+    fontSize:10,
   }
 }));
 
