@@ -1,5 +1,10 @@
-import {LOAD_COMMENTS, APPEND_COMMENTS} from "../Types";
+import {LOAD_COMMENTS, APPEND_COMMENTS, DISPLAY_SNACKBAR} from "../Types";
 import bluntAxios from "../../Config/AxiosConfiguration";
+import {isNotEmptyObject} from "../Utility";
+import {
+  CONNECTION_ERROR,
+  SNACKBAR_VARIANT_ERROR
+} from "../../Constant/Constants";
 
 export const loadComments = (postId) => dispatch => {
   bluntAxios
@@ -21,6 +26,13 @@ export const addComment = (commentsDto) => {
         type: APPEND_COMMENTS,
         payload: response.data,
       });
+    })
+    .catch(error => {
+      dispatch({
+        type: DISPLAY_SNACKBAR,
+        message: isNotEmptyObject(error.response) ? error.response.data.message : CONNECTION_ERROR,
+        variant: SNACKBAR_VARIANT_ERROR
+      })
     })
   };
 }

@@ -9,8 +9,9 @@ const commentsStyles = makeStyles(theme => ({
   commentTextAlignment:{
     minHeight: 75,
     maxHeight: 350,
-    minWidth: 1100,
-    maxWidth: 1100,
+    minWidth: 1050,
+    maxWidth: 1050,
+    marginTop: 6,
     overflow: "scroll",
     overflowX: "auto",
     overflowY: "auto"

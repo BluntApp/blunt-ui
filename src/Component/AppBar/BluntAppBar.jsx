@@ -72,6 +72,12 @@ const BluntAppBar = (props) => {
                     inputProps={{'aria-label': 'search'}}
                 />
               </div>
+              <div className={classes.loggedInUser}>
+                <Typography variant="body2" color="textSecondary"
+                            component="p">
+                  Hi, {props.signedInBlunt.firstName}
+                </Typography>
+              </div>
             </Toolbar>
           </AppBar>
           <BluntMenuBar/>
@@ -82,6 +88,7 @@ const BluntAppBar = (props) => {
 
 const mapStateToProps = state => ({
   isMenuBarOpen: state.menuBarReducer.isMenuBarOpen,
+  signedInBlunt: state.signInReducer.signedInBlunt
 });
 
 export default connect(mapStateToProps, {toggleMenuBar})(BluntAppBar);
