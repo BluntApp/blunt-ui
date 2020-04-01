@@ -87,7 +87,7 @@ const SignIn = props => {
                   margin="normal"
                   required
                   fullWidth
-                  id="mobile"
+                  id="btnMobile"
                   label="Mobile"
                   name="mobile"
                   autoComplete="mobile"
@@ -106,7 +106,7 @@ const SignIn = props => {
                   name="password"
                   label="Password"
                   type="password"
-                  id="password"
+                  id="btnPassword"
                   helperText={credential.formErrors.password}
                   onChange={event => inputHandler(event)}
                   onBlur={event => validateField(event)}
@@ -124,6 +124,7 @@ const SignIn = props => {
                     fullWidth
                     variant="contained"
                     color="primary"
+                    id="btnSignIn"
                     disabled={!(credential.validForm)}
                     className={cs(classes.submit)}
                     onClick={doSignInBlunt}

@@ -1,5 +1,5 @@
 import {connect} from "react-redux";
-import {MuiThemeProvider} from "@material-ui/core";
+import {Badge, MuiThemeProvider} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import React, {useEffect, useState} from "react";
 import postGridListMuiTheme from "./postGridListMuiTheme";
@@ -28,18 +28,26 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextareaAutosize from "@material-ui/core/TextareaAutosize";
-import {loadFollowers} from "../../Store/Action/followerActions";
+import {
+  closeViewersTip,
+  loadFollowers,
+  viewersNameList
+} from "../../Store/Action/followerActions";
 import {loadPosts, postContent} from "../../Store/Action/postActions";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Tooltip from "@material-ui/core/Tooltip";
 import Comments from "../Comments/Comments";
 import {loadComments} from "../../Store/Action/commentsActions";
+import VisibilityIcon from '@material-ui/icons/VisibilitySharp';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOffSharp';
+import PeopleAltSharpIcon from '@material-ui/icons/PeopleAltSharp';
+import {DropzoneArea} from "material-ui-dropzone";
 
 const PostGridList = props => {
   const classes = postGridListStyles();
 
-  const loadComments = (event, expanded,  postId) => {
-    if(!expanded){
+  const loadComments = (event, expanded, postId) => {
+    if (!expanded) {
       return;
     }
     props.loadComments(postId)
@@ -53,6 +61,7 @@ const PostGridList = props => {
   const [followerList, setFollowerList] = useState([])
   const [checked, setChecked] = useState([]);
   const [content, setContent] = useState();
+  const [file, setFile] = useState();
   const [allRead, setAllRead] = useState(false);
 
   const toggleAllRead = (value) => {
@@ -81,8 +90,21 @@ const PostGridList = props => {
     setFollowerList(eFollowerList)
   }
 
+  const viewersName = (post) => {
+    if (sessionStorage.getItem("BLUNT-ID") != post.posterId) {
+      return;
+    } else if (post.viewersName) {
+      return;
+    }
+    props.viewersNameList(post.id);
+  }
+
   const storeContent = (event) => {
     setContent(event.target.value);
+  }
+
+  const storeFile = (droppedFile) => {
+    setFile(droppedFile);
   }
 
   const postContent = () => {
@@ -90,13 +112,17 @@ const PostGridList = props => {
     checked.map(selectedFollower => {
       selectedFollowerId.push(selectedFollower.followerId)
     })
-    props.postContent(selectedFollowerId, content, allRead);
+    props.postContent(selectedFollowerId, content, file, allRead);
   }
 
   useEffect(() => {
     props.loadPosts();
     props.loadFollowers()
   }, [])
+
+  useEffect(() => {
+
+  }, [props.posts])
 
   useEffect(() => {
     setFollowerList(props.followers);
@@ -174,6 +200,9 @@ const PostGridList = props => {
                         id="content"
                         onBlur={(event) => storeContent(event)}
                     />
+                    <DropzoneArea
+                        filesLimit={1}
+                        onChange={storeFile.bind(this)}/>
                   </CardContent>
                   <FormControlLabel
                       control={
@@ -212,11 +241,46 @@ const PostGridList = props => {
                         R
                       </Avatar>
                     }
-
-                    title={post.posterId === post.viewerId ? "You"
-                        : post.posterName}
+                    title={
+                      <Grid container spacing={3}>
+                        <Grid item xs={10}>
+                          {post.posterId === post.viewerId ? "You"
+                              : post.posterName}
+                        </Grid>
+                        <Grid item xs={1}>
+                          <div className={cs(classes.badgeAlignment)}>
+                            <Tooltip interactive
+                                     title={post.viewersName
+                                     && post.viewersName.length > 0
+                                         ? post.viewersName.map(viewerName =>
+                                             <div>{viewerName}</div>
+                                         ) : ""}
+                            >
+                              <Badge showZero={true}
+                                     badgeContent={post.viewersCount}
+                                     color="primary"
+                                     onMouseOver={event => viewersName(post)}>
+                                <PeopleAltSharpIcon/>
+                              </Badge>
+                            </Tooltip>
+                          </div>
+                        </Grid>
+                        <Grid item xs={1}>
+                          <Avatar className={cs(classes.visibilityAvatar)}>
+                            {post.commentPublic ?
+                                <Tooltip interactive title="Visible to all Viewers">
+                                  <VisibilityIcon
+                                      className={cs(classes.visibilityIcons)}/>
+                                </Tooltip> :
+                                <Tooltip interactive title="Protected">
+                                  <VisibilityOffIcon
+                                      className={cs(classes.visibilityIcons)}/>
+                                </Tooltip>}
+                          </Avatar>
+                        </Grid>
+                      </Grid>
+                    }
                     subheader={post.postedOn}
-
                 />
                 <CardContent className={cs(classes.contentAlignment)}>
                   <Typography variant="body2" color="textSecondary"
@@ -225,7 +289,9 @@ const PostGridList = props => {
                   </Typography>
                 </CardContent>
 
-                <ExpansionPanel TransitionProps={{unmountOnExit: true}} onChange={(event,expanded) => loadComments(event, expanded, post.id)}>
+                <ExpansionPanel TransitionProps={{unmountOnExit: true}}
+                                onChange={(event, expanded) => loadComments(
+                                    event, expanded, post.id)}>
                   <ExpansionPanelSummary
                       expandIcon={<ExpandMoreIcon/>}
                       aria-controls="panel1a-content"
@@ -249,8 +315,15 @@ const PostGridList = props => {
 
 const mapStateToProps = state => ({
   posts: state.postReducer.posts,
-  followers: state.followerReducer.followers
+  followers: state.followerReducer.followers,
 });
 
 export default connect(mapStateToProps,
-    {loadFollowers, loadPosts, postContent, loadComments})(PostGridList);
+    {
+      loadFollowers,
+      loadPosts,
+      postContent,
+      loadComments,
+      viewersNameList,
+      closeViewersTip
+    })(PostGridList);

@@ -18,6 +18,11 @@ const commentsMuiTheme = createMuiTheme({
       }
 
     },
+    MuiSvgIcon:{
+      root:{
+        width: ".6em"
+      }
+    },
     MuiCardContent:{
       root:{
         paddingBottom:5,

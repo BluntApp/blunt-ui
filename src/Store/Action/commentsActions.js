@@ -1,4 +1,4 @@
-import {LOAD_COMMENTS, APPEND_COMMENTS, DISPLAY_SNACKBAR} from "../Types";
+import {LOAD_COMMENTS, APPEND_COMMENTS, DISPLAY_SNACKBAR, LOAD_REPLY_COMMENTS} from "../Types";
 import bluntAxios from "../../Config/AxiosConfiguration";
 import {isNotEmptyObject} from "../Utility";
 import {
@@ -13,6 +13,19 @@ export const loadComments = (postId) => dispatch => {
     dispatch({
       type: LOAD_COMMENTS,
       payload: response.data
+    });
+  })
+}
+
+export const getReplyToComment = (commentsDto, postId) => dispatch => {
+  commentsDto.postId = postId;
+  bluntAxios
+  .post("/api/v1/comments/replies", commentsDto)
+  .then(response => {
+    dispatch({
+      type: LOAD_REPLY_COMMENTS,
+      payload: response.data,
+      commentsDto: commentsDto
     });
   })
 }

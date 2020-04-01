@@ -28,11 +28,15 @@ export const loadPosts =()=> dispatch =>{
 }
 
 
-export const postContent = (followers,content,allRead) => dispatch => {
-  let contentDto = {"contentType": "TXT", "content": content}
+export const postContent = (followers,content,selectedFile,allRead) => dispatch => {
+
+  let contentDto = {"content": content}
+  let postDto = {"viewerList": followers, "commentPublic": allRead, contentDto}
+  const formData = new FormData();
+  formData.append('file', selectedFile[0]);
+  formData.append('postDto', JSON.stringify(postDto));
   bluntAxios
-  .post("/api/v1/publish/post",
-      {"viewerList": followers, "commentPublic": allRead,contentDto})
+  .post("/api/v1/publish/post", formData)
   .then(response => {
     response.data.contentDto=contentDto;
     dispatch({

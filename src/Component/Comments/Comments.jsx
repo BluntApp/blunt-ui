@@ -8,10 +8,15 @@ import cs from "classnames";
 import commentsStyles from "./commentsStyles";
 import Button from "@material-ui/core/Button";
 import CardContent from "@material-ui/core/CardContent";
-import {addComment} from "../../Store/Action/commentsActions";
+import {
+  addComment,
+  getReplyToComment
+} from "../../Store/Action/commentsActions";
 import Typography from "@material-ui/core/Typography";
 import CardHeader from "@material-ui/core/CardHeader";
 import Grid from "@material-ui/core/Grid";
+import Tooltip from "@material-ui/core/Tooltip";
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 const Comments = props => {
   const classes = commentsStyles();
@@ -31,8 +36,19 @@ const Comments = props => {
     setCommentsReceived(cPostList);
   }
   const postPrivateComment = (commentReply, selectedPostId) => {
-    props.addComment({"postId": selectedPostId, "replyToCommentId": commentReply.id, "comments": commentReply.reply});
+    props.addComment({
+      "postId": selectedPostId,
+      "replyToCommentId": commentReply.id,
+      "comments": commentReply.reply
+    });
     toggleReplyBox(false, commentReply.id)
+  }
+
+  const getReplyToComment = (comment, postId) => {
+    if (comment.replyToComments) {
+      return;
+    }
+    props.getReplyToComment(comment,postId);
   }
 
   const toggleReplyBox = (value, commentId) => {
@@ -40,13 +56,12 @@ const Comments = props => {
     if (commentsReceived[0]) {
       let cPost = cPostList.find(comment => comment.id === commentId)
       cPost.showReplyBox = value;
-      if(!value){
-        cPost.reply="";
+      if (!value) {
+        cPost.reply = "";
       }
     }
     setCommentsReceived(cPostList);
   }
-
 
   const postComment = () => {
     props.addComment(commentDto);
@@ -71,7 +86,7 @@ const Comments = props => {
 
   const displayReply = (comment) => {
     if (comment.commenterId == null) {
-      if(sessionBluntId == comment.posterId){
+      if (sessionBluntId == comment.posterId) {
         return false;
       }
       return true;
@@ -89,8 +104,6 @@ const Comments = props => {
         {...commentDto, comments: event.target.value});
   }
 
-
-
   return (
       <MuiThemeProvider theme={commentsMuiTheme}>
         <Paper elevation={1} className={cs(classes.commentBox)}>
@@ -99,18 +112,32 @@ const Comments = props => {
                 comment => (<div>
                   <CardHeader
                       title={displayName(comment)}
-                      subheader={comment.commentedOn}
+                      subheader={
+                        <div>
+                          <div>
+                            {comment.commentedOn}
+                          </div>
+                          <div hidden={!comment.replyToCommentId}>
+                            <Tooltip title={comment.replyToComments} placement="right" classes={{ tooltip: classes.replyToolTip }}>
+                              <QuestionAnswerIcon onMouseOver={event=>getReplyToComment(comment, props.selectedPost.id)}/>
+                            </Tooltip>
+                          </div>
+                        </div>
+                      }
                   />
                   <CardContent>
                     <Grid container spacing={2}>
                       <Grid item xs={11}>
+
                         <Typography variant="body2" color="textSecondary"
                                     component="p">
                           {comment.comments}
                         </Typography>
+
                       </Grid>
                       <Grid item xs={1}>
-                        <div hidden={displayReply(comment)? true : comment.showReplyBox}>
+                        <div hidden={displayReply(comment) ? true
+                            : comment.showReplyBox}>
                           <Button size="small" color="primary"
                                   onClick={event => toggleReplyBox(true,
                                       comment.id)}>
@@ -129,12 +156,16 @@ const Comments = props => {
                               className={cs(classes.commentTextAlignment)}
                               id="contentReply"
                               value={comment.reply}
-                              onChange={(event) => changePrivateComment(event, comment)}
+                              onChange={(event) => changePrivateComment(event,
+                                  comment)}
                           />
                         </Grid>
                         <Grid item xs={1}>
-                          <Button size="small" color="primary" disabled={!comment.reply || comment.reply.length==0}
-                                  onClick={event => postPrivateComment(comment,props.selectedPost.id)}>
+                          <Button size="small" color="primary"
+                                  disabled={!comment.reply
+                                  || comment.reply.length == 0}
+                                  onClick={event => postPrivateComment(comment,
+                                      props.selectedPost.id)}>
                             submit
                           </Button>
                           <Button size="small" color="primary"
@@ -167,14 +198,14 @@ const Comments = props => {
                   </Grid>
                   <Grid item xs={1}>
                     <Button size="small" color="primary"
-                            onClick={event => postComment()} disabled={commentDto.comments.length==0}>
+                            onClick={event => postComment()}
+                            disabled={commentDto.comments.length == 0}>
                       submit
                     </Button>
                   </Grid>
                 </Grid>
               </CardContent>
             </div>
-
           </card>
         </Paper>
       </MuiThemeProvider>
@@ -184,4 +215,4 @@ const Comments = props => {
 const mapStateToProps = state => ({
   posts: state.postReducer.posts
 });
-export default connect(mapStateToProps, {addComment})(Comments);
+export default connect(mapStateToProps, {addComment, getReplyToComment})(Comments);

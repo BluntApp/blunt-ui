@@ -64,6 +64,17 @@ const postGridListStyles = makeStyles(theme => ({
   avatar: {
     backgroundColor: 'red',
   },
+  visibilityAvatar:{
+    backgroundColor: 'grey',
+    width: 22,
+    height: 22
+  },
+  visibilityIcons:{
+    width: "0.7em"
+  },
+  badgeAlignment:{
+    marginLeft:50
+  },
   column: {
     flexBasis: '33.33%',
   },

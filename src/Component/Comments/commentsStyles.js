@@ -16,6 +16,9 @@ const commentsStyles = makeStyles(theme => ({
     overflowX: "auto",
     overflowY: "auto"
   },
+  replyToolTip:{
+    maxWidth: 1000
+  },
   commentBox:{
     minHeight: 75,
     maxHeight: 350,

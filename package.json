@@ -16,6 +16,7 @@
     "clsx": "^1.0.4",
     "date-fns": "^2.9.0",
     "history": "^4.10.1",
+    "material-ui-dropzone": "^2.4.9",
     "perfect-scrollbar": "^1.4.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
